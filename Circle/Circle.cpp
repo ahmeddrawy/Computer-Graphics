@@ -97,15 +97,25 @@ void DrawCirclePolar(HDC hdc,int xc, int yc , int R ,COLORREF c ){
     double dtheta = 1.0/R;
     draw8points(hdc ,xc , yc , x,y,c);
     for(double theta = 0 ; theta < M_PI/4 ; theta +=dtheta ){
-        printf("%d\n" ,theta);
         x= Round(R * cos(theta));
         y= Round(R * sin(theta));
         draw8points(hdc ,xc , yc , x,y,c);
 
     }
+}
+/// exploiting the similarity in 8 points and solve it iteratively
+void ImprovedCirclePolar(HDC hdc , int xc , int yc , int R , COLORREF c){
+    int x = R , y = 0 ;
+    double dtheta = 1.0/R ;
+    double cosDeltaTheta = cos(dtheta);
+    double sinDeltaTheta = sin(dtheta);
+    while(x > y){
 
-
-
+        int nx = Round(x*cosDeltaTheta - y * sinDeltaTheta);    ///trig
+        int ny=  Round(x*sinDeltaTheta + y*cosDeltaTheta);
+        draw8points(hdc , xc, yc,nx,ny,c);
+        x = nx , y=ny;
+    }
 }
 
 /*  This function is called by the Windows function DispatchMessage()  */
@@ -114,6 +124,8 @@ LRESULT CALLBACK WindowProcedure (HWND hwnd, UINT message, WPARAM wParam, LPARAM
 {
     HDC hdc= GetDC(hwnd);
     DrawCirclePolar(hdc , 50 , 50 , 20 , RGB(0,0,0));
+    DrawCirclePolar(hdc , 100 , 100 , 20 , RGB(0,0,0));
+
     switch (message)                  /* handle the messages */
     {
         case WM_DESTROY:
