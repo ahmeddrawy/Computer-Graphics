@@ -107,7 +107,7 @@ void drawLine(HDC hdc,int x1 , int y1 , int x2 , int y2 , COLORREF c){
     }
 
 }
-/// based on first difference draw in  the first quad were x and y are increasing only , doesn't work in other cases
+/// based on first difference draw
 void drawLine2(HDC hdc,int x1 , int y1 , int x2 , int y2 , COLORREF c){
     int dx = x1 - x2 , dy = y1- y2;
     if(abs(dx) > abs(dy)){
@@ -134,7 +134,7 @@ void drawLine2(HDC hdc,int x1 , int y1 , int x2 , int y2 , COLORREF c){
         SetPixel(hdc,  x1 , y1,c);
         double m_inv = dx*1.0/dy;
         for(int y = y1+1 ; y<=y2 ; ++y){
-            y+=m_inv;
+            x+=m_inv;
             SetPixel(hdc, Round(x), y,c);
         }
 
@@ -148,7 +148,7 @@ LRESULT CALLBACK WindowProcedure (HWND hwnd, UINT message, WPARAM wParam, LPARAM
 {
     HDC hdc= GetDC(hwnd);
     //drawLine(hdc,0,0,100,50,RGB(0,0,0));
-    drawLine(hdc,0,200,200,0,RGB(0,0,0));
+    drawLine2(hdc,0,200,200,0,RGB(0,0,0));
     switch (message)                  /* handle the messages */
     {
         case WM_DESTROY:
