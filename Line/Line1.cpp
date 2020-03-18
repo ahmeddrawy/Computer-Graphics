@@ -78,7 +78,7 @@ int WINAPI WinMain (HINSTANCE hThisInstance,
 int Round(double x){ /// utility function
     return (int)x+0.5;
 }
-/// drawing line in the 1st quadrant
+/// drawing line in the 1st quadrant using the line equation
 void drawLine(HDC hdc,int x1 , int y1 , int x2 , int y2 , COLORREF c){
     int dx = x1 - x2, dy = y1 - y2;
     if(abs(dx) >abs(dy)){ /// change in x
@@ -92,8 +92,6 @@ void drawLine(HDC hdc,int x1 , int y1 , int x2 , int y2 , COLORREF c){
             SetPixel(hdc, x , Round(y) , c);
 
         }
-
-
     }
     else {  /// change in y
         if(y1>y2){
@@ -106,9 +104,42 @@ void drawLine(HDC hdc,int x1 , int y1 , int x2 , int y2 , COLORREF c){
             SetPixel(hdc, Round(x) ,y , c);
 
         }
+    }
+
+}
+/// based on first difference draw in  the first quad were x and y are increasing only , doesn't work in other cases
+void drawLine2(HDC hdc,int x1 , int y1 , int x2 , int y2 , COLORREF c){
+    int dx = x1 - x2 , dy = y1- y2;
+    if(abs(dx) > abs(dy)){
+        if(x1>x2){
+            swap(x1, x2);
+            swap(y1,y2);
+        }
+        double y = y1 ;
+        SetPixel(hdc,  x1 , y1,c);
+        double m = dy*1.0/dx;
+        for(int x = x1+1 ; x<=x2 ; ++x){
+            y+=m;
+            SetPixel(hdc, x, Round(y),c);
+        }
 
 
     }
+    else {
+        if(y1>y2){
+            swap(x1, x2);
+            swap(y1,y2);
+        }
+        double x = x1 ;
+        SetPixel(hdc,  x1 , y1,c);
+        double m_inv = dx*1.0/dy;
+        for(int y = y1+1 ; y<=y2 ; ++y){
+            y+=m_inv;
+            SetPixel(hdc, Round(x), y,c);
+        }
+
+    }
+
 
 }
 /*  This function is called by the Windows function DispatchMessage()  */
@@ -116,7 +147,8 @@ void drawLine(HDC hdc,int x1 , int y1 , int x2 , int y2 , COLORREF c){
 LRESULT CALLBACK WindowProcedure (HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
     HDC hdc= GetDC(hwnd);
-    drawLine(hdc,0,0,50,50,RGB(0,0,0));
+    //drawLine(hdc,0,0,100,50,RGB(0,0,0));
+    drawLine(hdc,0,200,200,0,RGB(0,0,0));
     switch (message)                  /* handle the messages */
     {
         case WM_DESTROY:
