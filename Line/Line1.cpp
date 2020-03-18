@@ -78,12 +78,45 @@ int WINAPI WinMain (HINSTANCE hThisInstance,
 int Round(double x){ /// utility function
     return (int)x+0.5;
 }
+/// drawing line in the 1st quadrant
+void drawLine(HDC hdc,int x1 , int y1 , int x2 , int y2 , COLORREF c){
+    int dx = x1 - x2, dy = y1 - y2;
+    if(abs(dx) >abs(dy)){ /// change in x
+        if(x1>x2){
+            swap(x1, x2);
+            swap(y1,y2);
+        }
+        SetPixel(hdc , x1, y1,c);
+        for(int x = x1+1; x<=x2 ; ++x){
+            double y = (1.0*dy/dx)*(x-x1) + y1;
+            SetPixel(hdc, x , Round(y) , c);
 
+        }
+
+
+    }
+    else {  /// change in y
+        if(y1>y2){
+            swap(x1, x2);
+            swap(y1,y2);
+        }
+        SetPixel(hdc , x1, y1,c);
+        for(int y = y1+1; y<=y2 ; ++y){
+            double x = (1.0*dx/dy)*(y-y1) + x1;
+            SetPixel(hdc, Round(x) ,y , c);
+
+        }
+
+
+    }
+
+}
 /*  This function is called by the Windows function DispatchMessage()  */
 
 LRESULT CALLBACK WindowProcedure (HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
     HDC hdc= GetDC(hwnd);
+    drawLine(hdc,0,0,50,50,RGB(0,0,0));
     switch (message)                  /* handle the messages */
     {
         case WM_DESTROY:
