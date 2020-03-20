@@ -132,7 +132,19 @@ void DrawCirclePolar(HDC hdc,int xc, int yc , int R ,COLORREF c ){
 
     }
 }
+void DrawCircleLines(HDC hdc,int xc, int yc , int R ,COLORREF c ){
+    int x = R , y = 0 ;
+    double dtheta = 1.0/R;
+    draw8points(hdc ,xc , yc , x,y,c);
+    for(double theta = 0 ; theta < M_PI/4 ; theta +=dtheta ){
+        x= Round(R * cos(theta));
+        y= Round(R * sin(theta));
+        drawLine(hdc , xc+x, yc+y , xc , yc,c);
+        drawLine(hdc , xc-y, yc+x , xc , yc,c);
 
+
+    }
+}
 
 /*  This function is called by the Windows function DispatchMessage()  */
 int xx1 = -1 , yy1 = -1 , xx2 = 0 , yy2 = 0 , xx3 = 0 , yy3 = 0 ;
@@ -197,6 +209,7 @@ LRESULT CALLBACK WindowProcedure (HWND hwnd, UINT message, WPARAM wParam, LPARAM
                 cout <<r1 << " "<< r2 <<"\n";
                 DrawCirclePolar(hdc , xx1,yy1,r1 ,RGB(0,0,0) );
                 DrawCirclePolar(hdc, xx2 , yy2 ,r2 , RGB(0,0,0) );
+                DrawCircleLines(hdc,xx1,yy1,r1,RGB(100,0,100));
 
             }
             break;
