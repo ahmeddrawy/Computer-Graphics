@@ -140,7 +140,7 @@ void DrawCircleLines(HDC hdc,int xc, int yc , int R ,COLORREF c ){
         x= Round(R * cos(theta));
         y= Round(R * sin(theta));
         drawLine(hdc , xc+x, yc+y , xc , yc,c);
-        drawLine(hdc , xc-y, yc+x , xc , yc,c);
+        drawLine(hdc , xc-x, yc-y , xc , yc,c);
 
 
     }
@@ -165,19 +165,18 @@ LRESULT CALLBACK WindowProcedure (HWND hwnd, UINT message, WPARAM wParam, LPARAM
                 cnt++;
                 xx1 = GET_X_LPARAM(lParam);
                 yy1 = GET_Y_LPARAM(lParam);
-                cout << "p1\n";
+
             }
             else {
                 cnt++;
                 xx2 = GET_X_LPARAM(lParam);
                 yy2 = GET_Y_LPARAM(lParam);
-                cout << "p2\n";
 
                 //DrawCirclePolar(hdc , xx2,yy2,50 ,RGB(0,0,0) );
             }
             break;
         case WM_RBUTTONDOWN:
-            cout <<"Right"<< cnt << endl;
+
             if((cnt>0) && (cnt%2==0) ){
                 xx3 = GET_X_LPARAM(lParam);
                 yy3 = GET_Y_LPARAM(lParam);
@@ -186,8 +185,7 @@ LRESULT CALLBACK WindowProcedure (HWND hwnd, UINT message, WPARAM wParam, LPARAM
 
                 int dx = xx1 - xx2 ;
                 int dy = yy1 - yy2 ;
-                cout <<"dx = " << dx <<endl;
-                cout <<"dy = " << dy <<endl;
+
                 if(dx == 0){
                     xx3 = xx2;
 
@@ -199,14 +197,10 @@ LRESULT CALLBACK WindowProcedure (HWND hwnd, UINT message, WPARAM wParam, LPARAM
                    // cout << 1.0*dy/dx
                     yy3 = Round(((1.0*dy)/dx) *(xx3 -xx2) + yy2);
                 }
-                cout << "p3\n";
-                cout <<xx1 <<" " << yy1 << endl;
-                cout <<xx2 <<" " << yy2 << endl;
-                cout <<xx3 <<" " << yy3 << endl;
 
                 int r1 = Round(sqrt((xx1-xx3)*(xx1-xx3) + (yy1-yy3)*(yy1-yy3)));
                 int r2 = Round(sqrt((xx2-xx3)*(xx2-xx3) + (yy2-yy3)*(yy2-yy3)));
-                cout <<r1 << " "<< r2 <<"\n";
+
                 DrawCirclePolar(hdc , xx1,yy1,r1 ,RGB(0,0,0) );
                 DrawCirclePolar(hdc, xx2 , yy2 ,r2 , RGB(0,0,0) );
                 DrawCircleLines(hdc,xx1,yy1,r1,RGB(100,0,100));
